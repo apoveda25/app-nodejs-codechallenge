@@ -1,0 +1,40 @@
+{
+  "products": {
+    "create_one": {
+      "product_must_have_variants": "El producto debe tener al menos un variante",
+      "product_already_exists": "El producto ya existe",
+      "variants_already_exists": "Las variantes del producto ya existen",
+      "attributes_not_found": "Los atributos de la variante del producto no se encontraron",
+      "variant_repeated_in_product": "La variante esta repetida en el producto",
+      "variant_with_attributes_repeated": "La variante del producto ya existe con los mismos atributos",
+      "variant_must_have_attributes": "La variante del producto debe tener al menos un atributo",
+      "the_attribute_you_are_trying_to_add_is_already_in_the_variant": "El atributo que intentas agregar ya existe en la variante del producto"
+    },
+    "find_one": {
+      "product_not_found": "El producto no fue encontrado"
+    }
+  },
+  "variants": {
+    "create_one": {
+      "product_not_found": "El producto no fue encontrado",
+      "variant_already_exists": "La variante del producto ya existe",
+      "attributes_not_found": "Los atributos de la variante del producto no se encontraron",
+      "variant_repeated_in_product": "La variante esta repetida en el producto",
+      "variant_with_attributes_repeated": "La variante del producto ya existe con los mismos atributos",
+      "variant_must_have_attributes": "La variante del producto debe tener al menos un atributo",
+      "the_attribute_you_are_trying_to_add_is_already_in_the_variant": "El atributo que intentas agregar ya existe en la variante del producto"
+    },
+    "find_one": {
+      "variant_not_found": "La variante no fue encontrada"
+    }
+  },
+  "attributes": {
+    "create_one": {
+      "attribute_already_exists_with_same_id": "Ya existe un atributo con el mismo ID",
+      "attribute_already_exists_with_same_type_value_and_measuring_unit": "Ya existe un atributo con el mismo nombre y valor"
+    },
+    "find_one": {
+      "attribute_not_found": "El atributo no fue encontrado"
+    }
+  }
+}

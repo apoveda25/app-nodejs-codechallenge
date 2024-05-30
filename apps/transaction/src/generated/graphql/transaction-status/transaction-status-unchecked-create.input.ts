@@ -1,0 +1,20 @@
+import { Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { TransactionStatusName } from '../prisma/transaction-status-name.enum';
+import { TransactionUncheckedCreateNestedManyWithoutTransactionStatusInput } from '../transaction/transaction-unchecked-create-nested-many-without-transaction-status.input';
+
+@InputType()
+export class TransactionStatusUncheckedCreateInput {
+
+    @Field(() => String, {nullable:true})
+    id?: string;
+
+    @Field(() => TransactionStatusName, {nullable:false})
+    name!: keyof typeof TransactionStatusName;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => TransactionUncheckedCreateNestedManyWithoutTransactionStatusInput, {nullable:true})
+    transactions?: TransactionUncheckedCreateNestedManyWithoutTransactionStatusInput;
+}
