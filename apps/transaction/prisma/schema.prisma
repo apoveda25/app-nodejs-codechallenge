@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator nestgraphql {
+  provider = "node node_modules/prisma-nestjs-graphql"
+  // for yarn monorepos
+  // provider = "prisma-nestjs-graphql"
+  output   = "../src/generated/graphql"
+}
+
+model Transaction {
+  transactionExternalId   String            @id @default(uuid())
+  value                   Float
+  createdAt               DateTime          @default(now())
+  accountExternalIdDebit  String
+  accountExternalIdCredit String
+  transactionType         TransactionType   @relation(fields: [transactionTypeId], references: [id])
+  transactionTypeId       Int
+  transactionStatus       TransactionStatus @relation(fields: [transactionStatusId], references: [id])
+  transactionStatusId     String
+}
+
+model TransactionType {
+  id           Int           @id @default(autoincrement())
+  name         String
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model TransactionStatus {
+  id           String                @id @default(uuid())
+  name         TransactionStatusName @unique
+  createdAt    DateTime              @default(now())
+  transactions Transaction[]
+}
+
+enum TransactionStatusName {
+  PENDING
+  APPROVED
+  REJECTED
+}

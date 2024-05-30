@@ -4,14 +4,18 @@
   "sourceRoot": "apps/transaction/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "builder": {
-      "type": "swc",
-      "options": {
-        "watch": true
-      }
-    },
     "webpack": true,
-    "tsConfigPath": "apps/transaction/tsconfig.app.json"
+    "tsConfigPath": "apps/transaction/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "**/*.graphql",
+        "watchAssets": true
+      },
+      {
+        "include": "assets/i18n/**/*.json",
+        "watchAssets": true
+      }
+    ]
   },
   "monorepo": true,
   "root": "apps/transaction",
@@ -32,6 +36,15 @@
       "sourceRoot": "apps/antifraud/src",
       "compilerOptions": {
         "tsConfigPath": "apps/antifraud/tsconfig.app.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     }
   }

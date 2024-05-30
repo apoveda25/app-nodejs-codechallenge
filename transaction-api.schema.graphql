@@ -1,0 +1,374 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+input FloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+type Mutation {
+  transactionCreateOne(transactionCreateOneTransactionInput: TransactionCreateOneTransactionInput!): TransactionGraphQLType!
+  transactionUpdateOne(transactionUpdateOneTransactionInput: TransactionUpdateOneTransactionInput!): TransactionGraphQLType!
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+"""A string that cannot be passed as an empty value"""
+scalar NonEmptyString
+
+input PaginationInput {
+  """Docs by page. Max 50 per page."""
+  docsByPage: PositiveInt = 10
+
+  """Page number. Min 1 page."""
+  page: PositiveInt = 1
+}
+
+"""Floats that will have a value greater than 0."""
+scalar PositiveFloat
+
+"""Integers that will have a value greater than 0."""
+scalar PositiveInt
+
+type Query {
+  transactionCountMany(transactionCountManyTransactionInput: TransactionCountManyTransactionInput = {}): Float!
+  transactionFindMany(paginationInput: PaginationInput = {docsByPage: 10, page: 1}, transactionFindManyTransactionInput: TransactionFindManyTransactionInput = {}, transactionSortManyTransactionInput: TransactionSortManyTransactionInput = {}): [TransactionGraphQLType!]!
+  transactionFindOne(transactionFindOneTransactionInput: TransactionFindOneTransactionInput!): TransactionGraphQLType!
+  transactionStatusCountMany(transactionStatusCountManyTransactionStatusInput: TransactionStatusCountManyTransactionStatusInput = {}): Float!
+  transactionStatusFindMany(paginationInput: PaginationInput = {docsByPage: 10, page: 1}, transactionStatusFindManyTransactionStatusInput: TransactionStatusFindManyTransactionStatusInput = {}, transactionStatusSortManyTransactionStatusInput: TransactionStatusSortManyTransactionStatusInput = {}): [TransactionStatusGraphQLType!]!
+  transactionStatusFindOne(transactionStatusFindOneTransactionStatusInput: TransactionStatusFindOneTransactionStatusInput!): TransactionStatusGraphQLType!
+  transactionTypeCountMany(transactionTypeCountManyTransactionTypeInput: TransactionTypeCountManyTransactionTypeInput = {}): Float!
+  transactionTypeFindMany(paginationInput: PaginationInput = {docsByPage: 10, page: 1}, transactionTypeFindManyTransactionTypeInput: TransactionTypeFindManyTransactionTypeInput = {}, transactionTypeSortManyTransactionTypeInput: TransactionTypeSortManyTransactionTypeInput = {}): [TransactionTypeGraphQLType!]!
+  transactionTypeFindOne(transactionTypeFindOneTransactionTypeInput: TransactionTypeFindOneTransactionTypeInput!): TransactionTypeGraphQLType!
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringFilterInput {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: StringFilterNotModeInput
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringFilterNotModeInput {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  notIn: [String!]
+  startsWith: String
+}
+
+"""Input to count many `Transaction`"""
+input TransactionCountManyTransactionInput {
+  AND: [TransactionFindManyTransactionInput!]
+  NOT: [TransactionFindManyTransactionInput!]
+  OR: [TransactionFindManyTransactionInput!]
+  accountExternalIdCredit: StringFilter
+  accountExternalIdDebit: StringFilter
+  createdAt: DateTimeFilter
+  transactionExternalId: StringFilter
+  transactionStatusId: StringFilter
+  transactionTypeId: IntFilter
+  value: FloatFilter
+}
+
+"""Input to create a `Transaction`"""
+input TransactionCreateOneTransactionInput {
+  """Example field (40542996-3549-4dd5-8815-803f4e24c53e)"""
+  accountExternalIdCredit: UUID
+
+  """Example field (794f1128-65da-4f5b-8145-a37c9b10ca09)"""
+  accountExternalIdDebit: UUID
+
+  """Example field (123)"""
+  tranferTypeId: PositiveInt!
+
+  """Example field (123.45)"""
+  value: PositiveFloat!
+}
+
+"""Input to find many `Transaction`"""
+input TransactionFindManyTransactionInput {
+  AND: [TransactionFindManyTransactionInput!]
+  NOT: [TransactionFindManyTransactionInput!]
+  OR: [TransactionFindManyTransactionInput!]
+  accountExternalIdCredit: StringFilter
+  accountExternalIdDebit: StringFilter
+  createdAt: DateTimeFilter
+  transactionExternalId: StringFilter
+  transactionStatusId: StringFilter
+  transactionTypeId: IntFilter
+  value: FloatFilter
+}
+
+"""Input to find one `Transaction`"""
+input TransactionFindOneTransactionInput {
+  """Example field (b9e7254a-cfb7-4f1d-a24f-f0543ca18c03)"""
+  transactionExternalId: UUID!
+}
+
+"""An TransactionGraphQLType is a object that represents a transaction."""
+type TransactionGraphQLType {
+  """Example field (2007-12-03T10:15:30Z)"""
+  createdAt: DateTimeISO!
+
+  """Example field (6ca90359-1b65-4622-9747-63e5607d9852)"""
+  transactionExternalId: UUID!
+
+  """Example field (f2e40470-5938-4b9f-a8c9-a5305c152c25)"""
+  transactionStatusId: UUID!
+  transactionType: TransactionTypeGraphQLType!
+
+  """Example field (123)"""
+  transactionTypeId: PositiveInt!
+
+  """Example field (123.45)"""
+  value: PositiveFloat!
+}
+
+input TransactionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+"""Input to sort many `Transaction`"""
+input TransactionSortManyTransactionInput {
+  accountExternalIdCredit: SortOrder
+  accountExternalIdDebit: SortOrder
+  createdAt: SortOrder
+  transactionExternalId: SortOrder
+  transactionStatusId: SortOrder
+  transactionTypeId: SortOrder
+  value: SortOrder
+}
+
+"""Input to count many `TransactionStatus`"""
+input TransactionStatusCountManyTransactionStatusInput {
+  AND: [TransactionStatusFindManyTransactionStatusInput!]
+  NOT: [TransactionStatusFindManyTransactionStatusInput!]
+  OR: [TransactionStatusFindManyTransactionStatusInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  name: StringFilterInput
+}
+
+"""Input to find many `TransactionStatus`"""
+input TransactionStatusFindManyTransactionStatusInput {
+  AND: [TransactionStatusFindManyTransactionStatusInput!]
+  NOT: [TransactionStatusFindManyTransactionStatusInput!]
+  OR: [TransactionStatusFindManyTransactionStatusInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  name: StringFilterInput
+}
+
+"""Input to find one `TransactionStatus`"""
+input TransactionStatusFindOneTransactionStatusInput {
+  """Example field (b2cc5e7c-e971-4727-aa3f-e82aff943f4d)"""
+  id: UUID!
+}
+
+"""
+An TransactionStatusGraphQLType is an object that represents a transaction status.
+"""
+type TransactionStatusGraphQLType {
+  """Example field (2007-12-03T10:15:30Z)"""
+  createdAt: DateTimeISO!
+
+  """Example field (964bd88d-7361-4052-ac6b-062078110154)"""
+  id: UUID!
+
+  """Example field (APPROVED)"""
+  name: NonEmptyString!
+  transactions(paginationInput: PaginationInput = {docsByPage: 10, page: 1}, transactionFindManyTransactionInput: TransactionFindManyTransactionInput = {}, transactionSortManyTransactionInput: TransactionSortManyTransactionInput = {}): [TransactionGraphQLType!]!
+}
+
+enum TransactionStatusName {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+"""Input to sort many `TransactionStatus`"""
+input TransactionStatusSortManyTransactionStatusInput {
+  createdAt: SortOrder
+  id: SortOrder
+  name: SortOrder
+  transactions: TransactionOrderByRelationAggregateInput
+}
+
+"""Input to count many `TransactionType`"""
+input TransactionTypeCountManyTransactionTypeInput {
+  AND: [TransactionTypeFindManyTransactionTypeInput!]
+  NOT: [TransactionTypeFindManyTransactionTypeInput!]
+  OR: [TransactionTypeFindManyTransactionTypeInput!]
+  createdAt: DateTimeFilter
+  id: IntFilter
+  name: StringFilter
+}
+
+"""Input to find many `TransactionType`"""
+input TransactionTypeFindManyTransactionTypeInput {
+  AND: [TransactionTypeFindManyTransactionTypeInput!]
+  NOT: [TransactionTypeFindManyTransactionTypeInput!]
+  OR: [TransactionTypeFindManyTransactionTypeInput!]
+  createdAt: DateTimeFilter
+  id: IntFilter
+  name: StringFilter
+}
+
+"""Input to find one `TransactionType`"""
+input TransactionTypeFindOneTransactionTypeInput {
+  """Example field (123)"""
+  id: PositiveInt!
+}
+
+"""
+An TransactionTypeGraphQLType is an object that represents a transaction type.
+"""
+type TransactionTypeGraphQLType {
+  """Example field (2007-12-03T10:15:30Z)"""
+  createdAt: DateTimeISO!
+
+  """Example field (123)"""
+  id: PositiveInt!
+
+  """Example field (string)"""
+  name: NonEmptyString!
+  transactions(paginationInput: PaginationInput = {docsByPage: 10, page: 1}, transactionFindManyTransactionInput: TransactionFindManyTransactionInput = {}, transactionSortManyTransactionInput: TransactionSortManyTransactionInput = {}): [TransactionGraphQLType!]!
+}
+
+"""Input to sort many `TransactionType`"""
+input TransactionTypeSortManyTransactionTypeInput {
+  createdAt: SortOrder
+  id: SortOrder
+  name: SortOrder
+  transactions: TransactionOrderByRelationAggregateInput
+}
+
+"""Input to create a `Transaction`"""
+input TransactionUpdateOneTransactionInput {
+  """Example field (1976dfc0-6df8-42de-8fa0-7578262526e8)"""
+  transactionExternalId: UUID
+
+  """Example field (APPROVED)"""
+  transactionStatusName: TransactionStatusName
+}
+
+"""
+A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
+"""
+scalar UUID

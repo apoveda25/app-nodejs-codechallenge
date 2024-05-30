@@ -1,25 +1,231 @@
-version: "3.7"
 services:
+  pd0:
+    image: pingcap/pd:latest
+    container_name: yape-tidb-pd0
+    ports:
+      - '2379'
+    volumes:
+      - ./config/pd.toml:/pd.toml:ro
+      - tidbdata:/data
+      - tidblogs:/logs
+    command:
+      - --name=pd0
+      - --client-urls=http://0.0.0.0:2379
+      - --peer-urls=http://0.0.0.0:2380
+      - --advertise-client-urls=http://pd0:2379
+      - --advertise-peer-urls=http://pd0:2380
+      - --initial-cluster=pd0=http://pd0:2380,pd1=http://pd1:2380
+      - --data-dir=/data/pd0
+      - --config=/pd.toml
+      - --log-file=/logs/pd0.log
+    restart: on-failure
+    networks:
+      - tidbnet
+
+  pd1:
+    image: pingcap/pd:latest
+    container_name: yape-tidb-pd1
+    ports:
+      - '2379'
+    volumes:
+      - ./config/pd.toml:/pd.toml:ro
+      - tidbdata:/data
+      - tidblogs:/logs
+    command:
+      - --name=pd1
+      - --client-urls=http://0.0.0.0:2379
+      - --peer-urls=http://0.0.0.0:2380
+      - --advertise-client-urls=http://pd1:2379
+      - --advertise-peer-urls=http://pd1:2380
+      - --initial-cluster=pd0=http://pd0:2380,pd1=http://pd1:2380
+      - --data-dir=/data/pd1
+      - --config=/pd.toml
+      - --log-file=/logs/pd1.log
+    restart: on-failure
+    networks:
+      - tidbnet
+
+  tikv0:
+    image: pingcap/tikv:latest
+    container_name: yape-tidb-tikv0
+    volumes:
+      - ./config/tikv.toml:/tikv.toml:ro
+      - tidbdata:/data
+      - tidblogs:/logs
+    command:
+      - --addr=0.0.0.0:20160
+      - --advertise-addr=tikv0:20160
+      - --data-dir=/data/tikv0
+      - --pd=pd0:2379,pd1:2379
+      - --config=/tikv.toml
+      - --log-file=/logs/tikv0.log
+    depends_on:
+      - 'pd0'
+      - 'pd1'
+    restart: on-failure
+    networks:
+      - tidbnet
+
+  tikv1:
+    image: pingcap/tikv:latest
+    container_name: yape-tidb-tikv1
+    volumes:
+      - ./config/tikv.toml:/tikv.toml:ro
+      - tidbdata:/data
+      - tidblogs:/logs
+    command:
+      - --addr=0.0.0.0:20160
+      - --advertise-addr=tikv1:20160
+      - --data-dir=/data/tikv1
+      - --pd=pd0:2379,pd1:2379
+      - --config=/tikv.toml
+      - --log-file=/logs/tikv1.log
+    depends_on:
+      - 'pd0'
+      - 'pd1'
+    restart: on-failure
+    networks:
+      - tidbnet
+
+  tidb:
+    image: pingcap/tidb:latest
+    container_name: yape-tidb
+    ports:
+      - '4000:4000'
+      - '10080:10080'
+    volumes:
+      - ./config/tidb.toml:/tidb.toml:ro
+      - tidblogs:/logs
+    command:
+      - --store=tikv
+      - --path=pd0:2379,pd1:2379
+      - --config=/tidb.toml
+      - --log-file=/logs/tidb.log
+      - --advertise-address=tidb
+    depends_on:
+      - 'tikv0'
+      - 'tikv1'
+    restart: on-failure
+    networks:
+      - tidbnet
+
+  redpanda-0:
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      # Address the broker advertises to clients that connect to the Kafka API.
+      # Use the internal addresses to connect to the Redpanda brokers'
+      # from inside the same Docker network.
+      # Use the external addresses to connect to the Redpanda brokers'
+      # from outside the Docker network.
+      - --advertise-kafka-addr internal://redpanda-0:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      # Address the broker advertises to clients that connect to the HTTP Proxy.
+      - --advertise-pandaproxy-addr internal://redpanda-0:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      # Redpanda brokers use the RPC API to communicate with each other internally.
+      - --rpc-addr redpanda-0:33145
+      - --advertise-rpc-addr redpanda-0:33145
+      # Mode dev-container uses well-known configuration properties for development in containers.
+      - --mode dev-container
+      # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
+      - --smp 1
+      - --default-log-level=info
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.6
+    container_name: yape-redpanda-0
+    volumes:
+      - redpanda-0:/var/lib/redpanda/data
+    networks:
+      - redpandanet
+    ports:
+      - 18081:18081
+      - 18082:18082
+      - 19092:19092
+      - 19644:9644
+  console:
+    container_name: yape-redpanda-console
+    image: docker.redpanda.com/redpandadata/console:v2.6.0
+    networks:
+      - redpandanet
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda-0:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda-0:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda-0:9644"]
+    ports:
+      - 8081:8080
+    depends_on:
+      - redpanda-0
+
   postgres:
-    image: postgres:14
+    image: postgres:11.21-alpine3.17
+    container_name: yape-postgres
+    restart: always
+    hostname: postgres.localhost
+    environment:
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME}
     ports:
-      - "5432:5432"
+      - 5432:5432
+    volumes:
+      - keycloakdata:/var/lib/postgresql/data
+    networks:
+      - keycloaknet
+
+  keycloak:
+    image: yape/keycloak
+    build:
+      dockerfile: ./docker/keycloak.Dockerfile
+    container_name: yape-keycloak
+    restart: always
+    depends_on:
+      - postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-  zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.3
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-  kafka:
-    image: confluentinc/cp-enterprise-kafka:5.5.3
-    depends_on: [zookeeper]
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_BROKER_ID: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9991
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres.localhost/yape
+      KC_HOSTNAME: localhost
+      KEYCLOAK_USER: ${KEYCLOAK_DB_USER}
     ports:
-      - 9092:9092
+      - 8083:8080
+      - 8443:8443
+    networks:
+      - keycloaknet
+
+volumes:
+  tidbdata:
+    driver: local
+    name: yape-tidb-data
+  tidblogs:
+    driver: local
+    name: yape-tidb-logs
+  redpanda-0:
+    driver: local
+    name: yape-redpanda-0
+  keycloakdata:
+    driver: local
+    name: yape-keycloak-data
+
+networks:
+  tidbnet:
+    name: yape-tidbnet
+    driver: bridge
+  redpandanet:
+    name: yape-redpandanet
+    driver: bridge
+  keycloaknet:
+    name: yape-keycloaknet
+    driver: bridge
