@@ -188,10 +188,10 @@ input TransactionCountManyTransactionInput {
 
 """Input to create a `Transaction`"""
 input TransactionCreateOneTransactionInput {
-  """Example field (a1fa927f-5925-427a-a2c3-6bdab0ddf570)"""
+  """Example field (09647ce8-df4b-4eea-84ca-41e0dd1dfad8)"""
   accountExternalIdCredit: UUID
 
-  """Example field (63a4867d-7c5a-4779-80fc-e7c828e607f9)"""
+  """Example field (c5b6a73e-6e8f-4637-9d0b-53068757a32f)"""
   accountExternalIdDebit: UUID
 
   """Example field (123)"""
@@ -217,7 +217,7 @@ input TransactionFindManyTransactionInput {
 
 """Input to find one `Transaction`"""
 input TransactionFindOneTransactionInput {
-  """Example field (fdaca142-b891-4386-a9c6-ba22886255e2)"""
+  """Example field (ca0dd4bc-800d-4f88-b6f2-59dba7c6ff76)"""
   transactionExternalId: UUID!
 }
 
@@ -226,10 +226,10 @@ type TransactionGraphQLType {
   """Example field (2007-12-03T10:15:30Z)"""
   createdAt: DateTimeISO!
 
-  """Example field (ad87ea63-067b-4e88-9cfa-fccde5434582)"""
+  """Example field (10613f98-c45c-403e-af97-5d7b8d4e65aa)"""
   transactionExternalId: UUID!
 
-  """Example field (225cc2a2-c2b4-41c3-b729-006d6e88fa5e)"""
+  """Example field (31bb5af3-282a-447e-92e9-9557a8b9532e)"""
   transactionStatusId: UUID!
   transactionType: TransactionTypeGraphQLType!
 
@@ -277,7 +277,7 @@ input TransactionStatusFindManyTransactionStatusInput {
 
 """Input to find one `TransactionStatus`"""
 input TransactionStatusFindOneTransactionStatusInput {
-  """Example field (9daf0831-e0d7-4ef7-8dde-7805d05552ca)"""
+  """Example field (69a3739e-0060-4906-96be-5a5b2017c6ac)"""
   id: UUID!
 }
 
@@ -288,7 +288,7 @@ type TransactionStatusGraphQLType {
   """Example field (2007-12-03T10:15:30Z)"""
   createdAt: DateTimeISO!
 
-  """Example field (d575ad74-76d6-4cc5-b510-e6be7ae871d1)"""
+  """Example field (93715516-f9df-4568-9de5-253ca5107f4f)"""
   id: UUID!
 
   """Example field (APPROVED)"""
@@ -361,7 +361,7 @@ input TransactionTypeSortManyTransactionTypeInput {
 
 """Input to create a `Transaction`"""
 input TransactionUpdateOneTransactionInput {
-  """Example field (91f53d8e-e1bc-44d2-842f-dcaffeadcf99)"""
+  """Example field (34e0ddf8-9392-4072-ba9a-d91c611cae95)"""
   transactionExternalId: UUID
 
   """Example field (APPROVED)"""
