@@ -7,9 +7,15 @@ import { PaginationInput } from '@app/shared/application/inputs';
 import { TransactionStatusGraphQLType } from '@app/shared/application/types';
 import { EResources, EScopes } from '@app/shared/domain/enums';
 import { TPaginationDto } from '@app/shared/domain/types';
+import { UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Resource, Scopes } from 'nest-keycloak-connect';
+import {
+  AuthGuard,
+  Resource,
+  ResourceGuard,
+  Scopes,
+} from 'nest-keycloak-connect';
 import {
   TransactionStatusFindManyTransactionStatusDtoSchema,
   TransactionStatusSortManyTransactionStatusDtoSchema,
@@ -24,7 +30,7 @@ import {
   TTransactionStatusSortManyTransactionStatusDto,
 } from '../../../domain/find-many/dtos';
 
-// @UseGuards(AuthGuard, ResourceGuard)
+@UseGuards(AuthGuard, ResourceGuard)
 @Resource(EResources.TRANSACTIONS_STATUS)
 @Resolver(() => TransactionStatusGraphQLType)
 export class TransactionsStatusFindManyResolver {

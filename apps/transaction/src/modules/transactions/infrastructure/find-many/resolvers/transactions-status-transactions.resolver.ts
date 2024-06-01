@@ -10,9 +10,15 @@ import {
 } from '@app/shared/application/types';
 import { EResources, EScopes } from '@app/shared/domain/enums';
 import { TPaginationDto } from '@app/shared/domain/types';
+import { UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { Resource, Scopes } from 'nest-keycloak-connect';
+import {
+  AuthGuard,
+  Resource,
+  ResourceGuard,
+  Scopes,
+} from 'nest-keycloak-connect';
 import {
   TransactionFindManyTransactionDtoSchema,
   TransactionSortManyTransactionDtoSchema,
@@ -27,7 +33,7 @@ import {
   TTransactionSortManyTransactionDto,
 } from '../../../domain/find-many/dtos';
 
-// @UseGuards(AuthGuard, ResourceGuard)
+@UseGuards(AuthGuard, ResourceGuard)
 @Resource(EResources.TRANSACTIONS)
 @Resolver(() => TransactionStatusGraphQLType)
 export class TransactionsStatusTransactionsResolver {

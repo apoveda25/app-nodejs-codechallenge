@@ -3,12 +3,18 @@ import {
   TransactionStatusGraphQLType,
 } from '@app/shared/application/types';
 import { EResources, EScopes } from '@app/shared/domain/enums';
+import { UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { Resource, Scopes } from 'nest-keycloak-connect';
+import {
+  AuthGuard,
+  Resource,
+  ResourceGuard,
+  Scopes,
+} from 'nest-keycloak-connect';
 import { TransactionStatusFindOneQueryImpl } from '../../../application/find-one/queries';
 
-// @UseGuards(AuthGuard, ResourceGuard)
+@UseGuards(AuthGuard, ResourceGuard)
 @Resource(EResources.TRANSACTIONS_STATUS)
 @Resolver(() => TransactionGraphQLType)
 export class TransactionsTransactionStatusResolver {

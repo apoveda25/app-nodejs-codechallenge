@@ -113,12 +113,12 @@ To create the necessary containers to run the application, use the following syn
 docker compose up -d
 ```
 
-<!-- ## Create necessary data in keycloak to run the application
+## Create necessary data in keycloak to run the application
 
 Go to the folder where the keycloak app is with the following syntax:
 
 ```zsh
-cd apps/keycloak-iac/
+cd apps/oidc
 ```
 
 Login in keycloak with the following syntax:
@@ -142,17 +142,17 @@ pulumi stack init dev
 Set environment variables for the keycloak provider with the following syntax:
 
 ```zsh
-pulumi config set keycloak:url http://localhost:8080 && \
+pulumi config set keycloak:url http://localhost:8083 && \
 pulumi config set keycloak:clientId admin-cli --secret && \
 pulumi config set keycloak:username admin && \
-pulumi config set keycloak:password admin123 --secret
+pulumi config set keycloak:password admin --secret
 ```
 
 Create the resources in keycloak using the `dev` stack with the following syntax:
 
 ```zsh
 pulumi up --stack dev
-``` -->
+```
 
 ## Management database:
 
@@ -175,3 +175,21 @@ pnpm run start:dev transaction
 ```sh
 pnpm run start:dev antifraud
 ```
+
+### Configure Client GraphQL
+
+1. Download [Banana Cake Pop](https://chillicream.com/products/bananacakepop/)
+
+2. Set general settings
+
+![Step 1](docs/assets/step1.png)
+
+![Step 2](docs/assets/step2.png)
+
+3. Set authorization settings
+
+![Step 3](docs/assets/step3.png)
+
+![Step 4](docs/assets/step4.png)
+
+![Step 5](docs/assets/step5.png)

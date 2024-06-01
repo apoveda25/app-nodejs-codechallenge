@@ -1,15 +1,21 @@
 import { ZodValidationPipe } from '@app/shared';
 import { TransactionStatusGraphQLType } from '@app/shared/application/types';
 import { EResources, EScopes } from '@app/shared/domain/enums';
+import { UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Resource, Scopes } from 'nest-keycloak-connect';
+import {
+  AuthGuard,
+  Resource,
+  ResourceGuard,
+  Scopes,
+} from 'nest-keycloak-connect';
 import { TransactionStatusFindOneTransactionStatusDtoSchema } from '../../../application/find-one/dtos';
 import { TransactionStatusFindOneTransactionStatusInput } from '../../../application/find-one/inputs';
 import { TransactionStatusFindOneQueryImpl } from '../../../application/find-one/queries';
 import { TTransactionStatusFindOneTransactionStatusDto } from '../../../domain/find-one/dtos';
 
-// @UseGuards(AuthGuard, ResourceGuard)
+@UseGuards(AuthGuard, ResourceGuard)
 @Resource(EResources.TRANSACTIONS_STATUS)
 @Resolver(() => TransactionStatusGraphQLType)
 export class TransactionsStatusFindOneResolver {
